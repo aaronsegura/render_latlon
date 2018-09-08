@@ -7,8 +7,15 @@ import subprocess
 class LatLon():
 
     def __init__(self, lat, lon):
-        self.lat = float(lat)
-        self.lon = float(lon)
+
+        if lat > 90 or lat < -90:
+            raise RuntimeError("Latitude must be between -90 and 90.  Received: %s" % lon)
+
+        if lon > 180.0 or lon < -180.0:
+            raise RuntimeError("Longitude must be between -180 and 180.  Received %s" %lat )
+
+        self.lat = lat
+        self.lon = lon
 
     def tile(self, zoom):
         lat_rad = math.radians(self.lat)
@@ -66,18 +73,25 @@ def main():
         raise RuntimeError("Tile directory does not exist: %s" % args.tileDir)
 
     try:
-        ulPos = LatLon(args.ULLATLON.split(",")[0], args.ULLATLON.split(",")[1])
-    except IndexError:
-        raise RuntimeError("Invalid coordinates for Upper-left bound: %s" % args.ULLATLON)
+        [lat, lon] = args.ULLATLON.split(",")
+        lat = float(lat)
+        lon = float(lon)
+    except ValueError:
+        raise RuntimeError("Invalid upper-bound coordinates: %s" % args.ULLATLON )
+
+    ulPos = LatLon(lat, lon)
 
     try:
-        lrPos =  LatLon(args.LRLATLON.split(",")[0], args.LRLATLON.split(",")[1])
-    except IndexError:
-        raise RuntimeError("Invalid coordinates for Lower-right bound: %s" % args.LRLATLON)
+        [lat, lon] =  args.LRLATLON.split(",")
+        lat = float(lat)
+        lon = float(lon)
+    except ValueError:
+        raise RuntimeError("Invalid lower-bound coordinates: %s" % args.LRLATLON)
 
+    lrPos =  LatLon(lat, lon)
 
     if not (lrPos > ulPos):
-        raise RuntimeError("Error: %s and %s do not form a valid bounding box" % ( ulPos, lrPos))
+        raise RuntimeError("%s and %s do not form a valid bounding box" % ( ulPos, lrPos))
 
     for zoomLevel in range(args.minZoom, args.maxZoom+1): # Arrays atart at 9
 
