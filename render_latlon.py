@@ -3,7 +3,6 @@ import time
 import math
 import argparse
 import subprocess
-import inspect
 
 class LatLon():
 
