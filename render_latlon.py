@@ -98,7 +98,6 @@ def main():
                 line = p.stdout.readline()
                 if not line: break
                 print line
-                time.sleep(0.1)
 
         except KeyboardInterrupt:
 
