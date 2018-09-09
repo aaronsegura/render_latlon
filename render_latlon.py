@@ -45,12 +45,12 @@ def main():
                         dest='ULLATLON',
                         type=str,
                         required=True,
-                        help='Upper-left LatLon Coordinates in "lat,lon" format')
+                        help='Upper-left Coordinates in "lat,lon" format')
     parser.add_argument('-l',
                         dest='LRLATLON',
                         type=str,
                         required=True,
-                        help='Lower-right LatLon Coordinates in "lat,lon" format')
+                        help='Lower-right Coordinates in "lat,lon" format')
     parser.add_argument('-z',
                         dest='minZoom',
                         type=int,
