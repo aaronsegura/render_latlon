@@ -8,10 +8,10 @@ class LatLon():
     def __init__(self, lat, lon):
 
         if lat > 90 or lat < -90:
-            raise RuntimeError("Latitude must be between -90 and 90.  Received: %s" % lon)
+            raise RuntimeError("Latitude must be between -90 and 90.  Received: %s" % lat)
 
         if lon > 180.0 or lon < -180.0:
-            raise RuntimeError("Longitude must be between -180 and 180.  Received %s" %lat )
+            raise RuntimeError("Longitude must be between -180 and 180.  Received %s" % lon )
 
         self.lat = lat
         self.lon = lon
@@ -65,6 +65,12 @@ def main():
                         type=str,
                         required=True,
                         help='mod_tile caching directory')
+    parser.add_argument('-m',
+                        dest='mapName',
+                        type=str,
+                        required=False,
+                        default="default",
+                        help='Map Name (default "default")')
 
     args = parser.parse_args()
 
@@ -97,8 +103,8 @@ def main():
         (ulX, ulY, _) = ulPos.tile(zoomLevel)
         (lrX, lrY, _) = lrPos.tile(zoomLevel)
 
-        renderCmd = "render_list -a -x %s -y %s -X %s -Y %s -z %s -Z %s -t %s" \
-                    % ( ulX, ulY, lrX, lrY, zoomLevel, zoomLevel, args.tileDir)
+        renderCmd = "render_list -a -m %s -x %s -y %s -X %s -Y %s -z %s -Z %s -t %s" \
+                    % ( args.mapName, ulX, ulY, lrX, lrY, zoomLevel, zoomLevel, args.tileDir)
 
         print "**********************************************************"
         print "Running: %s" % renderCmd
