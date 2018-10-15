@@ -68,9 +68,13 @@ def main():
     parser.add_argument('-m',
                         dest='mapName',
                         type=str,
-                        required=False,
                         default="default",
-                        help='Map Name (default "default")')
+                        help='Map Name, default: "default"')
+    parser.add_argument('-n',
+                        dest='numThreads',
+                        type=int,
+                        default=1,
+                        help='Number of threads, default:1')
 
     args = parser.parse_args()
 
@@ -103,8 +107,14 @@ def main():
         (ulX, ulY, _) = ulPos.tile(zoomLevel)
         (lrX, lrY, _) = lrPos.tile(zoomLevel)
 
-        renderCmd = "render_list -a -m %s -x %s -y %s -X %s -Y %s -z %s -Z %s -t %s" \
-                    % ( args.mapName, ulX, ulY, lrX, lrY, zoomLevel, zoomLevel, args.tileDir)
+        renderCmd = "render_list -a -m %s -x %s -y %s -X %s -Y %s -z %s -Z %s -t %s -n %s" \
+                % ( args.mapName, 
+                    ulX, ulY, 
+                    lrX, lrY, 
+                    zoomLevel,
+                    zoomLevel, 
+                    args.tileDir,
+                    args.numThreads)
 
         print "**********************************************************"
         print "Running: %s" % renderCmd
